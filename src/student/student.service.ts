@@ -14,7 +14,6 @@ export class StudentService {
   ) {}
 
   async getAllStudents(): Promise<Student[]> {
-    throw new Error('Method not implemented.');
     return await this.studentRepository.find({ relations: ['class'] });
   }
 

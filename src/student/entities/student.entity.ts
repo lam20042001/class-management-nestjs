@@ -4,7 +4,6 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  Unique,
 } from 'typeorm';
 import { Class } from '../../class/entities/class.entity';
 

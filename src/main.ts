@@ -1,11 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { CustomValidationPipe } from './pipes/CustomValidationPipe.pipes';
 import { AllExceptionsFilter } from './filters/exceptions.filters';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: 'http://localhost:4000', // Allow requests from this origin
+    methods: 'GET,POST', // Allow these HTTP methods
+    allowedHeaders: 'Content-Type,Authorization', // Allow these headers
+  });
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(
     new ValidationPipe({

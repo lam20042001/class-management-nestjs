@@ -49,7 +49,9 @@ export class ClassService {
     if (exitedName) {
       throw new Error(`Class name ${createData.name} already exists`);
     }
-    const newClass = this.classRepository.create({ name: createData.name });
+    const newClass = this.classRepository.create({
+      name: createData.name,
+    });
     return await this.classRepository.save(newClass);
   }
 
