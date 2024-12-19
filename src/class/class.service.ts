@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Class } from './entities/class.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,7 +24,7 @@ export class ClassService {
       relations: ['students'],
     });
     if (!exitedClass) {
-      throw new Error(`Class ${id} not found`);
+      throw new NotFoundException(`Class ${id} not found`);
     }
     return exitedClass;
   }
@@ -30,13 +34,15 @@ export class ClassService {
       where: { id: id },
     });
     if (!exitedClass) {
-      throw new Error(`Class ${id} not found`);
+      throw new NotFoundException(`Class ${id} not found`);
     }
     const exitedName: Class = await this.classRepository.findOne({
       where: { name: updateData.name },
     });
     if (exitedName && exitedName.id !== id) {
-      throw new Error(`Class name ${updateData.name} already exists`);
+      throw new BadRequestException(
+        `Class name ${updateData.name} already exists`,
+      );
     }
     if (updateData.name) exitedClass.name = updateData.name;
     return await this.classRepository.save(exitedClass);
@@ -47,7 +53,9 @@ export class ClassService {
       where: { name: createData.name },
     });
     if (exitedName) {
-      throw new Error(`Class name ${createData.name} already exists`);
+      throw new BadRequestException(
+        `Class name ${createData.name} already exists`,
+      );
     }
     const newClass = this.classRepository.create({
       name: createData.name,
@@ -61,10 +69,10 @@ export class ClassService {
       relations: ['students'],
     });
     if (!exitedClass) {
-      throw new Error(`Class ${id} not found`);
+      throw new NotFoundException(`Class ${id} not found`);
     }
     if (exitedClass.students.length > 0) {
-      throw new Error(`Class ${id} has students`);
+      throw new BadRequestException(`Class ${id} has students`);
     }
     return await this.classRepository.remove(exitedClass);
   }

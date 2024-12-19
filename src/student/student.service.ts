@@ -1,4 +1,8 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
 import { Repository } from 'typeorm';
@@ -23,7 +27,7 @@ export class StudentService {
       relations: ['class'],
     });
     if (!exitedStudent) {
-      throw new Error(`Student ${id} not found`);
+      throw new NotFoundException(`Student ${id} not found`);
     }
     return exitedStudent;
   }
@@ -36,7 +40,7 @@ export class StudentService {
       .where('student.name ILIKE :name', { name: `%${name}%` })
       .getMany();
     if (!exitedStudent) {
-      throw new Error(`Student ${name} not found`);
+      throw new NotFoundException(`Student ${name} not found`);
     }
     return exitedStudent;
   }
@@ -46,7 +50,7 @@ export class StudentService {
       where: { name: studentClass },
     });
     if (!classofStudent) {
-      throw new Error('Class not found');
+      throw new NotFoundException('Class not found');
     }
     return this.studentRepository.find({
       where: { class: { name: studentClass } },
@@ -65,13 +69,13 @@ export class StudentService {
     });
     console.log(classofStudent);
     if (!classofStudent) {
-      throw new Error('Class not found');
+      throw new NotFoundException('Class not found');
     }
     const existedStudent = await this.studentRepository.findOne({
       where: { name: name },
     });
     if (existedStudent) {
-      throw new Error(`Student ${name} existed`);
+      throw new BadRequestException(`Student ${name} existed`);
     }
     const newStudent = this.studentRepository.create({
       name,
@@ -90,7 +94,7 @@ export class StudentService {
       relations: ['class'],
     });
     if (!studentToUpdate) {
-      throw new Error(`Student ${id} not found`);
+      throw new NotFoundException(`Student ${id} not found`);
     }
     console.log(updateData.className);
     if (updateData.className) {
@@ -98,7 +102,7 @@ export class StudentService {
         where: { name: updateData.className },
       });
       if (!classofStudent) {
-        throw new Error('Class not found');
+        throw new NotFoundException('Class not found');
       }
       studentToUpdate.class = classofStudent;
     }
@@ -112,7 +116,7 @@ export class StudentService {
       relations: ['class'],
     });
     if (!student) {
-      throw new Error(`Student ${id} not found`);
+      throw new NotFoundException(`Student ${id} not found`);
     }
     return await this.studentRepository.remove(student);
   }
