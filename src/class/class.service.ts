@@ -41,7 +41,7 @@ export class ClassService {
     });
     if (exitedName && exitedName.id !== id) {
       throw new BadRequestException(
-        `Class name ${updateData.name} already exists`,
+        `Class ${updateData.name} already exists`,
       );
     }
     if (updateData.name) exitedClass.name = updateData.name;
@@ -54,7 +54,7 @@ export class ClassService {
     });
     if (exitedName) {
       throw new BadRequestException(
-        `Class name ${createData.name} already exists`,
+        `Class ${createData.name} already exists`,
       );
     }
     const newClass = this.classRepository.create({

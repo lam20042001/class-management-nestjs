@@ -50,7 +50,7 @@ export class StudentService {
       where: { name: studentClass },
     });
     if (!classofStudent) {
-      throw new NotFoundException('Class not found');
+      throw new NotFoundException(`Class ${studentClass} not found`);
     }
     return this.studentRepository.find({
       where: { class: { name: studentClass } },
@@ -69,7 +69,7 @@ export class StudentService {
     });
     console.log(classofStudent);
     if (!classofStudent) {
-      throw new NotFoundException('Class not found');
+      throw new NotFoundException(`Class ${className} not found`);
     }
     const existedStudent = await this.studentRepository.findOne({
       where: { name: name },
@@ -102,7 +102,7 @@ export class StudentService {
         where: { name: updateData.className },
       });
       if (!classofStudent) {
-        throw new NotFoundException('Class not found');
+        throw new NotFoundException(`Class ${updateData.className} not found`);
       }
       studentToUpdate.class = classofStudent;
     }
