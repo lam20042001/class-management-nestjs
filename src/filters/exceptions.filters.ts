@@ -18,8 +18,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
-    const errorDetail = exception instanceof HttpException? exception.getResponse() : 'Internal Server Error';
-    const devMessage = typeof errorDetail === 'string' ? errorDetail : (errorDetail as any).message || 'Unexpected error occured';
+    const errorDetail =
+      exception instanceof HttpException
+        ? exception.getResponse()
+        : 'Internal Server Error';
+    const devMessage =
+      typeof errorDetail === 'string'
+        ? errorDetail
+        : (errorDetail as any).message || 'Unexpected error occured';
 
     const errorResponse: ErrorResponse = {
       errorCode: status.toString(),
