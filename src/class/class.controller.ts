@@ -11,7 +11,7 @@ import { ClassService } from './class.service';
 import { CreateClassDto } from './dtos/create-class.dto';
 import { UpdateClassDto } from './dtos/update-class.dto';
 import { DeleteClassDto } from './dtos/delete-class.dto';
-import { GetStudentByIdDto } from '../student/dtos/get-student-id.dto';
+import { GetClassByIdDto } from './dtos/get-class-id.dto';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 
@@ -28,10 +28,8 @@ export class ClassController {
 
   @Roles('admin', 'principal', 'teacher')
   @Post('/id')
-  async getClassById(
-    @Body() getStudentByIdDto: GetStudentByIdDto,
-  ): Promise<any> {
-    return this.classService.getClassById(getStudentByIdDto.id);
+  async getClassById(@Body() getClassByIdDto: GetClassByIdDto): Promise<any> {
+    return this.classService.getClassById(getClassByIdDto.id);
   }
 
   @Roles('admin', 'principal')

@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { StudentModule } from './student/student.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClassModule } from './class/class.module';
+import { Class } from './class/entities/class.entity';
+import { Student } from './student/entities/student.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -14,7 +16,7 @@ import { ClassModule } from './class/class.module';
       username: 'postgres',
       password: '1',
       database: 'class-management',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [Student, Class],
       synchronize: false,
     }),
     StudentModule,
